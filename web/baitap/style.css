@@ -1,0 +1,23 @@
+body {
+    text-align: center;
+}
+h1 {
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;text-align: center;
+}
+input {
+    background-color: aqua;
+    border-color: transparent;
+    width: 128px;
+}
+
+#email {
+    background-color: #fff;
+    line-height: 64px;
+}
+
+#request_invite {
+    height: 64px;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-size: 16px;
+    color: #fff;
+}

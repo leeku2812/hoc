@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Bắt Bóng</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        canvas {
+            background-color: #87ceeb;
+            border: 2px solid black;
+        }
+    </style>
+</head>
+<body>
+
+<canvas id="gameCanvas" width="400" height="600"></canvas>
+
+<script>
+    var canvas = document.getElementById('gameCanvas');
+    var ctx = canvas.getContext('2d');
+
+    // Người chơi
+    var playerWidth = 60;
+    var playerHeight = 20;
+    var playerX = (canvas.width - playerWidth) / 2;
+    var playerSpeed = 5;
+
+    // Bóng
+    var ballRadius = 10;
+    var ballX = Math.random() * (canvas.width - 2 * ballRadius) + ballRadius;
+    var ballY = 0;
+    var ballSpeed = 3;
+
+    var rightPressed = false;
+    var leftPressed = false;
+
+    // Điều khiển di chuyển
+    document.addEventListener('keydown', keyDownHandler, false);
+    document.addEventListener('keyup', keyUpHandler, false);
+
+    function keyDownHandler(e) {
+        if (e.key == "Right" || e.key == "ArrowRight") {
+            rightPressed = true;
+        }
+        else if (e.key == "Left" || e.key == "ArrowLeft") {
+            leftPressed = true;
+        }
+    }
+
+    function keyUpHandler(e) {
+        if (e.key == "Right" || e.key == "ArrowRight") {
+            rightPressed = false;
+        }
+        else if (e.key == "Left" || e.key == "ArrowLeft") {
+            leftPressed = false;
+        }
+    }
+
+    function drawPlayer() {
+        ctx.beginPath();
+        ctx.rect(playerX, canvas.height - playerHeight, playerWidth, playerHeight);
+        ctx.fillStyle = "#0095DD";
+        ctx.fill();
+        ctx.closePath();
+    }
+
+    function drawBall() {
+        ctx.beginPath();
+        ctx.arc(ballX, ballY, ballRadius, 0, Math.PI * 2);
+        ctx.fillStyle = "#FF5733";
+        ctx.fill();
+        ctx.closePath();
+    }
+
+    function collisionDetection() {
+        if (ballY + ballRadius >= canvas.height - playerHeight && ballX > playerX && ballX < playerX + playerWidth) {
+            ballSpeed = -ballSpeed;
+            ballY = canvas.height - playerHeight - ballRadius;  // Đảm bảo bóng không bị "bỏ qua"
+        }
+    }
+
+    function draw() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        drawBall();
+        drawPlayer();
+        collisionDetection();
+
+        if (rightPressed && playerX < canvas.width - playerWidth) {
+            playerX += playerSpeed;
+        }
+        else if (leftPressed && playerX > 0) {
+            playerX -= playerSpeed;
+        }
+
+        ballY += ballSpeed;
+
+        if (ballY + ballRadius > canvas.height) {
+            // Nếu bóng rơi xuống, làm lại trò chơi
+            ballX = Math.random() * (canvas.width - 2 * ballRadius) + ballRadius;
+            ballY = 0;
+        }
+
+        requestAnimationFrame(draw);
+    }
+
+    draw();
+</script>
+
+</body>
+</html>
